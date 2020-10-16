@@ -35,6 +35,7 @@ public class ItemMN : MonoBehaviour
 
             GameData.Instance._itemData._name = _jsonList[i]["name"].ToString();
             GameData.Instance._itemData._function = _jsonList[i]["function"].ToString();
+            GameData.Instance._itemData._hint = _jsonList[i]["hint"].ToString();
 
             GameData.Instance._itemData._episode = System.Convert.ToInt32(_jsonList[i]["episode"].ToString());
             GameData.Instance._itemData._array = System.Convert.ToInt32(_jsonList[i]["array"].ToString());
@@ -112,6 +113,8 @@ public class ItemMN : MonoBehaviour
 
         if(!_inventory.ContainsKey(code)) _inventory.Add(code, 1);
         else _inventory[code] = 1;
+
+        GameData.Instance._event.OnItemEventCheck(code);
     }
 
 

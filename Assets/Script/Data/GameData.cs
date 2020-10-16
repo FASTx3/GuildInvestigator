@@ -58,7 +58,6 @@ public class GameData
         public int _type;
         public int _source;
         public int _emotion;
-        public int _eff;
 
         public string _name;
         public string _function;
@@ -67,7 +66,7 @@ public class GameData
     public Dictionary<int,Dictionary<int, List<EpisodeData>>> _episode = new Dictionary<int,Dictionary<int, List<EpisodeData>>>();
 
     [Serializable]
-    public struct MapEventData
+    public struct EventData
     {  
         public int _index;
         public int _map;
@@ -79,8 +78,8 @@ public class GameData
  
         public string _txt;
     }
-    public MapEventData _map_event;
-    public Dictionary<int, List<MapEventData>> _map_eventData = new Dictionary<int, List<MapEventData>>();
+    public EventData _event_data;
+    public Dictionary<int, EventData> _eventData = new Dictionary<int, EventData>();
 
     public List<string> _map = new List<string>();
 
@@ -102,6 +101,7 @@ public class GameData
         public int _type;
         public string _name;
         public string _function;
+        public string _hint;
 
         public int _episode;
         public int _array;
@@ -109,7 +109,6 @@ public class GameData
     public ItemData _itemData;
     public Dictionary<int, ItemData> _item_data = new Dictionary<int, ItemData>();
 
-    //public Dictionary<int, Dictionary<int, int>> _mix_item_data = new Dictionary<int, Dictionary<int, int>>();
     public Dictionary<int, List<int>> _mix_item_data = new Dictionary<int, List<int>>();
     public Dictionary<int, string> _announce_data = new Dictionary<int, string>(); 
 
@@ -124,8 +123,11 @@ public class GameData
         public int _episode;
         public int _map;
 
-        public Dictionary<int, bool> _auto_event = new Dictionary<int, bool>();//자동 이벤트 완료
+        public Dictionary<int, bool> _event_complete = new Dictionary<int, bool>();//이벤트 확인 여부
         public Dictionary<int, int> _inventory = new Dictionary<int, int>();//에피소드별 획득한 정보 아이템
+
+        public List<int> _my_member = new List<int>();//나와 같이 다니는 멤버
+        public Dictionary<int, List<int>> _map_member = new Dictionary<int, List<int>>();//맵에 귀속된 인물
 
 
 //---------------------------------------------------

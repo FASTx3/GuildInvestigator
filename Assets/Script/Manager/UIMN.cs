@@ -13,11 +13,13 @@ public class UIMN : MonoBehaviour
     }
 
     public List<GameObject> _pop = new List<GameObject>();
-    public int _pop_code;
+    public List<int> _pop_code = new List<int>();
     public void OnActiveObject(int code, bool active)
-    {
-        if(active) _pop_code = code;
+    {        
         _pop[code].SetActive(active);
+
+        if(active) _pop_code.Add(code);
+        else _pop_code.Remove(code);
     }
 
     public GameObject _bottom;
@@ -44,48 +46,51 @@ public class UIMN : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Escape))
+        if(Input.GetKeyUp(KeyCode.Escape)) CloseUI_HotKey();
+    }
+
+    public void CloseUI_HotKey()
+    {        
+        if(GameData.Instance._event._event_progress) return;
+        if(GameData.Instance._event._search) GameData.Instance._event.CloseSearch();
+        
+        if(GameData.Instance._item._announce._trigger)
         {
-            if(_pop_code < 1) return;
-            if(GameData.Instance._event._event_progress) return;
+            GameData.Instance._item._announce.OnAnnounceDone();
+            return;
+        }
+        
+        if(_pop_code.Count < 1) return;
 
-            if(GameData.Instance._event._search) GameData.Instance._event.CloseSearch();
+        switch(_pop_code[_pop_code.Count-1])
+        {
+            case 1 :
+                OnActiveObject(1, false);
+            break;
 
-            if(GameData.Instance._item._announce._trigger)
-            {
-                GameData.Instance._item._announce.OnAnnounceDone();
-                return;
-            }
+            case 2 :
+                OnActiveObject(2, false);
+            break;
 
-            switch(_pop_code)
-            {
-                case 1 :
-                    OnActiveObject(1, false);
-                break;
+            case 3 :
+                GameData.Instance._event.CloseTalk();
+            break;
 
-                case 2 :
-                    OnActiveObject(2, false);
-                break;
+            case 4 :
+                GameData.Instance._bg.CloseMap();
+            break;
 
-                case 3 :
-                    GameData.Instance._event.CloseTalk();
-                break;
+            case 5 :
+                GameData.Instance._item.CloseMix();
+            break;
 
-                case 4 :
-                    GameData.Instance._bg.CloseMap();
-                break;
+            case 6 :
+                GameData.Instance._item.CloseItem();
+            break;
 
-                case 5 :
-                    GameData.Instance._item.CloseMix();
-                break;
-
-                case 6 :
-                    GameData.Instance._item.CloseItem();
-                    if(GameData.Instance._item._mix_window) return;
-                break;
-            }
-
-            _pop_code = -1;
+            case 9 :
+                GameData.Instance._gm._alarm.CloseAlarm();
+            break;
         }
     }   
 }

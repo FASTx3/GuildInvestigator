@@ -15,39 +15,7 @@ public class BGMN : MonoBehaviour
     public IEnumerator SetMapData()
     {                
         yield return StartCoroutine(LoadMap());//맵 이름 정보 파싱
-        yield return StartCoroutine(LoadMapEventData());//맵내 이벤트 정보 파싱
-         yield return StartCoroutine(LoadMapMoveData());//맵 이동 정보 파싱
-    }
-
-    //맵 이벤트 정보 호출
-    public IEnumerator LoadMapEventData()
-	{
-		TextAsset t = (TextAsset)Resources.Load("bg_event", typeof(TextAsset));
-		yield return t;
-		yield return StartCoroutine(SetDataMapEvent(t.text));
-	}
-
-    public IEnumerator SetDataMapEvent(string jsonString)
-	{
-        GameData.Instance._map_eventData.Clear();
-		_jsonList = JsonMapper.ToObject(jsonString);
-
-        for(var i = 0; i< _jsonList.Count;i++)
-        {   
-            GameData.Instance._map_event._map = System.Convert.ToInt32(_jsonList[i]["map"].ToString());
-            GameData.Instance._map_event._episode = System.Convert.ToInt32(_jsonList[i]["episode"].ToString());
-            GameData.Instance._map_event._type = System.Convert.ToInt32(_jsonList[i]["type"].ToString());
-            GameData.Instance._map_event._member = System.Convert.ToInt32(_jsonList[i]["member"].ToString());
-            GameData.Instance._map_event._need = System.Convert.ToInt32(_jsonList[i]["need"].ToString());
-            GameData.Instance._map_event._event = System.Convert.ToInt32(_jsonList[i]["event"].ToString());
-
-            GameData.Instance._map_event._txt = _jsonList[i]["txt"].ToString();
-
-            if(!GameData.Instance._map_eventData.ContainsKey(GameData.Instance._map_event._map)) GameData.Instance._map_eventData.Add(GameData.Instance._map_event._map, new List<GameData.MapEventData>());
-            GameData.Instance._map_eventData[GameData.Instance._map_event._map].Add(GameData.Instance._map_event);
-        }
-
-        yield return null;  
+        yield return StartCoroutine(LoadMapMoveData());//맵 이동 정보 파싱
     }
 
     //맵이름 호출
@@ -129,19 +97,6 @@ public class BGMN : MonoBehaviour
         _bg_now.OnSet(_map);
 
         GameData.Instance._sound.Play_BGMSound(_map);
-    }
-
-    public List<GameObject> _sellect_btn = new List<GameObject>();
-    public List<Text> _sellect_btn_txt = new List<Text>();
-    public void OnSellectBtnReset()
-    {
-        for(var i = 0; i < _sellect_btn.Count; i++) _sellect_btn[i].SetActive(false);
-    }
-
-    public void OnSellectBtnText(int code, string txt)
-    {
-        _sellect_btn[code].SetActive(true);
-        _sellect_btn_txt[code].text = txt;
     }
 
     public bool _possible_map;

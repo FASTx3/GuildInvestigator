@@ -31,7 +31,6 @@ public class TalkMN : MonoBehaviour
             GameData.Instance._episodeData._type = System.Convert.ToInt32(_jsonList[i]["type"].ToString());
             GameData.Instance._episodeData._source = System.Convert.ToInt32(_jsonList[i]["source"].ToString());
             GameData.Instance._episodeData._emotion = System.Convert.ToInt32(_jsonList[i]["emotion"].ToString());
-            GameData.Instance._episodeData._eff = System.Convert.ToInt32(_jsonList[i]["eff"].ToString());
 
             GameData.Instance._episodeData._name = _jsonList[i]["name"].ToString();
             GameData.Instance._episodeData._function = _jsonList[i]["function"].ToString();
@@ -57,4 +56,27 @@ public class TalkMN : MonoBehaviour
         _talk.OnTalk(_data._name, _data._function);
     }
     
+    public Transform _talk_event_parent;
+    public TalkKeyword _talk_keyword_ori;
+    public List<TalkKeyword> _talk_keyword = new List<TalkKeyword>();
+
+    public void OnTalkKeyword(int code)
+    {
+        //필요한 정보가 없으면 오브젝트 생성이 되지 않는다.
+        if(GameData.Instance._eventData[code]._need > 0)
+        {
+            if(!GameData.Instance._item._inventory.ContainsKey(GameData.Instance._eventData[code]._need))  return;
+        }
+
+        _talk_keyword.Add(Instantiate(_talk_keyword_ori, _talk_event_parent));
+        
+        _talk_keyword[_talk_keyword.Count-1].transform.localScale = Vector3.one;
+        _talk_keyword[_talk_keyword.Count-1].OnSet(code);
+    }
+
+    public void EndTalkKeyword()
+    {
+        for(var i = 0; i < _talk_keyword.Count; i++) Destroy(_talk_keyword[i].gameObject);
+        _talk_keyword.Clear();
+    }
 }

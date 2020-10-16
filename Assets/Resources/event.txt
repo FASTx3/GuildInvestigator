@@ -1,0 +1,7 @@
+[{"index":1,"episode":1,"map":0,"type":1,"member":1,"need":0,"event":0,"txt":"조사원의 업무에 대해서"},
+{"index":2,"episode":1,"map":0,"type":1,"member":1,"need":0,"event":0,"txt":"고블린에 대해서"},
+{"index":3,"episode":1,"map":1,"type":0,"member":2,"need":0,"event":2,"txt":""},
+{"index":4,"episode":1,"map":2,"type":1,"member":2,"need":0,"event":3,"txt":"고블린을 어떻게 만났는가?"},
+{"index":5,"episode":1,"map":2,"type":1,"member":2,"need":0,"event":4,"txt":"고블린을 어떻게 토벌했는가?"},
+{"index":6,"episode":1,"map":0,"type":2,"member":0,"need":-1,"event":5,"txt":""},
+{"index":7,"episode":1,"map":0,"type":2,"member":0,"need":17,"event":6,"txt":""}]

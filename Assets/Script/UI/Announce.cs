@@ -46,7 +46,8 @@ public class Announce : MonoBehaviour
         _announce_txt[1].text = "";
         _announce_txt[2].text = "";
         
-        GameData.Instance._event.OnNextEvent();     
+        if(GameData.Instance._event._event_progress) GameData.Instance._event.OnNextEvent();
+        else GameData.Instance._event.OnItemEvent();
     }
 
     //아이템 획득 아나운스

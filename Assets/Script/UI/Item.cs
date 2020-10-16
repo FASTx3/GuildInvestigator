@@ -26,4 +26,9 @@ public class Item : MonoBehaviour
     {
         GameData.Instance._item.OnSellectItem(_index);
     }
+
+    public void OnHint()
+    {
+        GameData.Instance._gm.OnAlarm(GameData.Instance._item_data[_index]._hint);
+    }
 }

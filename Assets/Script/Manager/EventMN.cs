@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using LitJson;
+
 
 public class EventMN : MonoBehaviour
 {
@@ -10,6 +12,80 @@ public class EventMN : MonoBehaviour
     {
         GameData.Instance._event = this;
     }
+    private JsonData _jsonList;
+
+    public IEnumerator SetEventData()
+    {                
+        yield return StartCoroutine(LoadEventData());
+    }
+
+    public IEnumerator LoadEventData()
+	{
+		TextAsset t = (TextAsset)Resources.Load("event", typeof(TextAsset));
+		yield return t;
+		yield return StartCoroutine(SetDataEvent(t.text));
+	}
+
+    public IEnumerator SetDataEvent(string jsonString)
+	{
+        GameData.Instance._eventData.Clear();
+		_jsonList = JsonMapper.ToObject(jsonString);
+
+        for(var i = 0; i< _jsonList.Count;i++)
+        {   
+            GameData.Instance._event_data._index = System.Convert.ToInt32(_jsonList[i]["index"].ToString());
+            GameData.Instance._event_data._map = System.Convert.ToInt32(_jsonList[i]["map"].ToString());
+            GameData.Instance._event_data._episode = System.Convert.ToInt32(_jsonList[i]["episode"].ToString());
+            GameData.Instance._event_data._type = System.Convert.ToInt32(_jsonList[i]["type"].ToString());
+            GameData.Instance._event_data._member = System.Convert.ToInt32(_jsonList[i]["member"].ToString());
+            GameData.Instance._event_data._need = System.Convert.ToInt32(_jsonList[i]["need"].ToString());
+            GameData.Instance._event_data._event = System.Convert.ToInt32(_jsonList[i]["event"].ToString());
+
+            GameData.Instance._event_data._txt = _jsonList[i]["txt"].ToString();
+
+            GameData.Instance._eventData.Add(GameData.Instance._event_data._index, GameData.Instance._event_data);
+        }
+
+        yield return null;  
+    }
+
+    public Dictionary<int, List<int>> _map_event = new Dictionary<int, List<int>>();
+    public Dictionary<int, List<int>> _talk_event = new Dictionary<int, List<int>>();
+    public Dictionary<int, int> _item_event = new Dictionary<int, int>();
+
+    public IEnumerator SetEpisodeEventData()//에피소드 별 이벤트 정리
+	{
+        _map_event.Clear();
+        _talk_event.Clear();
+        _item_event.Clear();
+
+        foreach(var key in GameData.Instance._eventData.Keys)
+        {   
+            if(GameData.Instance._eventData[key]._episode != _episode) continue;
+            
+            switch(GameData.Instance._eventData[key]._type)
+            {
+                case 0 : //맵 이동시 이벤트 발생
+                    if(!_map_event.ContainsKey(GameData.Instance._eventData[key]._map)) _map_event.Add(GameData.Instance._eventData[key]._map, new List<int>());
+                    _map_event[GameData.Instance._eventData[key]._map].Add(key);
+                break;
+
+                case 1 : //대화 이벤트
+                    if(!_talk_event.ContainsKey(GameData.Instance._eventData[key]._member)) _talk_event.Add(GameData.Instance._eventData[key]._member, new List<int>());
+                    _talk_event[GameData.Instance._eventData[key]._member].Add(key);
+                break;
+
+                case 2 : //아이템 획득에 따른 이벤트
+                    _item_event.Add(GameData.Instance._eventData[key]._need, GameData.Instance._eventData[key]._event);
+                break;
+            }                     
+        }
+
+        yield return null;  
+    }
+
+    
+
 
     public int _episode;
     public int _event_code;
@@ -17,8 +93,7 @@ public class EventMN : MonoBehaviour
     public int _event_type;
     public bool _event_progress;
 
-    public Dictionary<int, bool> _auto_event = new Dictionary<int, bool>();
-    public bool _auto_event_check;
+    public Dictionary<int, bool> _event_complete = new Dictionary<int, bool>();
 
     public void OnFirstEvent()
     {
@@ -34,30 +109,46 @@ public class EventMN : MonoBehaviour
         _event_code = event_code;
         _count = 0;
 
+        if(!_event_complete.ContainsKey(event_code)) _event_complete.Add(event_code, false);
+
         OnEventShow();
         GameData.Instance._ui.CloseBottom();
     }
 
     public void OnEventCheck()//맵 이동시 자동 이벤트 여부 체크
     {
-        if(GameData.Instance._bg._bg_now == null) return;
+        int event_confirm = -1;
 
-        if(GameData.Instance._bg._bg_now._auto_event > 0)
+        if(_map_event.ContainsKey(GameData.Instance._bg._map))
         {
-            if(!_auto_event.ContainsKey(GameData.Instance._bg._bg_now._auto_event)) _auto_event.Add(GameData.Instance._bg._bg_now._auto_event, true);
 
-            if(_auto_event[GameData.Instance._bg._bg_now._auto_event])  
+            for(var i = 0; i <_map_event[GameData.Instance._bg._map].Count; i++)
             {
-                _auto_event_check = true;
-                OnEventStart(GameData.Instance._bg._bg_now._auto_event);
-            }  
-            else   
-            {
-                GameData.Instance._bg._bg_now.OnChar(); 
-                GameData.Instance._ui.OpenBottom();     
-            }       
+                int code = _map_event[GameData.Instance._bg._map][i];
+
+                if(GameData.Instance._eventData[code]._need == 0)
+                {
+                    if(_event_complete.ContainsKey(GameData.Instance._eventData[code]._event)) continue;
+                    event_confirm = GameData.Instance._eventData[code]._event;
+                    break;
+                }
+                else
+                {                    
+                    if(!GameData.Instance._item._inventory.ContainsKey(GameData.Instance._eventData[code]._need)) continue;
+                    if(_event_complete.ContainsKey(GameData.Instance._eventData[code]._event)) continue;
+                    event_confirm = GameData.Instance._eventData[code]._event;
+                    break;
+                }    
+            }
         }
-        else 
+
+
+        if(event_confirm > -1)             
+        {
+            _event_type = 0;
+            OnEventStart(event_confirm);
+        }
+        else
         {
             GameData.Instance._bg._bg_now.OnChar(); 
             GameData.Instance._ui.OpenBottom(); 
@@ -79,7 +170,8 @@ public class EventMN : MonoBehaviour
                 break;
 
                 case 1 : //대화 이벤트
-                     OnTalk();
+                    GameData.Instance._ui.CloseBottom();
+                    GameData.Instance._ui.OnActiveObject(3, true);
                 break;
 
                 case 2 : //조사 이벤트
@@ -87,13 +179,11 @@ public class EventMN : MonoBehaviour
                 break;
             }
 
-            if(_auto_event_check)//자동 이벤트 중복 실행 막기      
-            {
-                _auto_event_check = false;
-                _auto_event[GameData.Instance._bg._bg_now._auto_event] = false;
-            }  
-            
+            if(!_event_complete[_event_code]) _event_complete[_event_code] = true;
+
             _event_progress = false;
+
+            OnItemEvent();//아이템 이벤트 실행
         }        
         else
         {
@@ -115,9 +205,6 @@ public class EventMN : MonoBehaviour
     public void OnEventShow()//이벤트 내용
     {
         _trigger = true;
-
-        if(GameData.Instance._episode[_episode][_event_code][_count]._eff > -1)
-            GameData.Instance._sound.Play_EffectSound(GameData.Instance._episode[_episode][_event_code][_count]._eff);
 
         switch(GameData.Instance._episode[_episode][_event_code][_count]._type)
         {
@@ -145,6 +232,41 @@ public class EventMN : MonoBehaviour
                     OnNextEvent();
                 else 
                     GameData.Instance._item.GetItem(GameData.Instance._episode[_episode][_event_code][_count]._source);
+            break;
+
+            case 5 : //효과음                  
+                GameData.Instance._sound.Play_EffectSound(GameData.Instance._episode[_episode][_event_code][_count]._source); 
+                OnNextEvent();
+            break;
+
+            case 6 : //동행자 추가                  
+                GameData.Instance._char.MyMemberAdd(GameData.Instance._episode[_episode][_event_code][_count]._source); 
+                OnNextEvent();
+            break;
+
+            case 7 : //동행자 제거                  
+                GameData.Instance._char.MyMemberRemove(GameData.Instance._episode[_episode][_event_code][_count]._source); 
+                OnNextEvent();
+            break;
+
+            case 8 : //맵내 npc 추가                  
+                GameData.Instance._char.MapMemberAdd(GameData.Instance._bg._map, GameData.Instance._episode[_episode][_event_code][_count]._source); 
+                OnNextEvent();
+            break;
+
+            case 9 : //맵내 npc 제거                 
+                GameData.Instance._char.MapMemberRemove(GameData.Instance._bg._map, GameData.Instance._episode[_episode][_event_code][_count]._source); 
+                OnNextEvent();
+            break;
+
+            case 10 : //튜토리얼 & 안내 메세지  
+                GameData.Instance._gm.OnAlarm(GameData.Instance._announce_data[GameData.Instance._episode[_episode][_event_code][_count]._source]);              
+                OnNextEvent();
+            break;
+
+            case 11 : //에피소드 종료                 
+                GameData.Instance._gm.OnGameEnd();
+                OnNextEvent();
             break;
         }
     }
@@ -181,17 +303,24 @@ public class EventMN : MonoBehaviour
 
     public void CloseSearch()
     {
-        _search = false;
-
         GameData.Instance._ui.OpenBottom();
         GameData.Instance._bg.OnSearch(false);
         GameData.Instance._char.OnCharActive(true);
+
+        _search = false;
     }
 
-    public bool _possible_talk;
     public void OnTalk()
     {
-        if(!_possible_talk) return;
+        if(GameData.Instance._char._map_member.ContainsKey(GameData.Instance._bg._map))
+        {
+            for(var i = 0; i < GameData.Instance._char._map_member[GameData.Instance._bg._map].Count; i++)
+            {
+                int member = GameData.Instance._char._map_member[GameData.Instance._bg._map][i];
+                for(var j = 0; j < _talk_event[member].Count; j++) GameData.Instance._talk.OnTalkKeyword(_talk_event[member][j]);
+            }
+        }
+        else return;
 
         GameData.Instance._ui.CloseBottom();
         GameData.Instance._ui.OnActiveObject(3, true);
@@ -201,12 +330,45 @@ public class EventMN : MonoBehaviour
     {
         GameData.Instance._ui.OpenBottom();
         GameData.Instance._ui.OnActiveObject(3, false);
+
+        GameData.Instance._talk.EndTalkKeyword();
     }
 
-    public void OnTalkNPC(int code)
-    {       
-        GameData.Instance._ui.CloseBottom();   
-        GameData.Instance._ui.OnActiveObject(3, false);
-        GameData.Instance._bg._bg_now.OnTalkEvent(code);
+    public int _item_event_code;
+    public void OnItemEventCheck(int code)//아이템 이벤트 체크
+    {
+        if(_item_event.ContainsKey(code)) 
+        {
+            _item_event_code = _item_event[code]; 
+            return;
+        }
+
+        //수집 정보 모두 획득시
+        if(_item_event.ContainsKey(-1))
+        {
+            int item_count = 0;
+
+            foreach(var key in GameData.Instance._item._inventory.Keys)
+            {
+                if(GameData.Instance._item_data[key]._type == 1) item_count++;
+            }
+            if(GameData.Instance._item._item_count[_episode][1] == item_count) 
+            {
+                if(!_event_complete.ContainsKey(_item_event[-1])) _item_event_code = _item_event[-1]; 
+            }
+        }
+    }
+
+    public void OnItemEvent()//아이템 이벤트 실행
+    {
+        if(_item_event_code > 0)
+        {                
+            GameData.Instance._ui.CloseUI_HotKey();
+
+            _event_type = 0;
+            OnEventStart(_item_event_code);
+
+            _item_event_code = 0;
+        }
     }
 }
