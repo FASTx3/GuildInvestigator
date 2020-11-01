@@ -14,8 +14,10 @@ public class Alarm : MonoBehaviour
     }
 
     public void CloseAlarm()
-    {        
+    {                
         GameData.Instance._ui.OnActiveObject(9, false);
         _text.text= "";
+
+        GameData.Instance._event.OnNextEvent();
     }
 }

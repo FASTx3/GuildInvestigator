@@ -259,9 +259,10 @@ public class EventMN : MonoBehaviour
                 OnNextEvent();
             break;
 
-            case 10 : //튜토리얼 & 안내 메세지  
+            case 10 : //튜토리얼 & 안내 메세지
+                GameData.Instance._char.OnCharActive(false);
                 GameData.Instance._gm.OnAlarm(GameData.Instance._announce_data[GameData.Instance._episode[_episode][_event_code][_count]._source]);              
-                OnNextEvent();
+                //OnNextEvent();
             break;
 
             case 11 : //에피소드 종료                 
@@ -298,20 +299,21 @@ public class EventMN : MonoBehaviour
 
         GameData.Instance._ui.CloseBottom();
         GameData.Instance._bg.OnSearch(true);
-        GameData.Instance._char.OnCharActive(false);
+        //GameData.Instance._char.OnCharActive(false);
     }
 
     public void CloseSearch()
     {
         GameData.Instance._ui.OpenBottom();
         GameData.Instance._bg.OnSearch(false);
-        GameData.Instance._char.OnCharActive(true);
+        //GameData.Instance._char.OnCharActive(true);
 
         _search = false;
     }
 
-    public void OnTalk()
+    public void OnTalk(int member)
     {
+        /*        
         if(GameData.Instance._char._map_member.ContainsKey(GameData.Instance._bg._map))
         {
             for(var i = 0; i < GameData.Instance._char._map_member[GameData.Instance._bg._map].Count; i++)
@@ -321,6 +323,9 @@ public class EventMN : MonoBehaviour
             }
         }
         else return;
+        */
+
+        for(var j = 0; j < _talk_event[member].Count; j++) GameData.Instance._talk.OnTalkKeyword(_talk_event[member][j]);                
 
         GameData.Instance._ui.CloseBottom();
         GameData.Instance._ui.OnActiveObject(3, true);
@@ -359,7 +364,7 @@ public class EventMN : MonoBehaviour
         }
     }
 
-    public void OnItemEvent()//아이템 이벤트 실행
+    public void OnItemEvent()//특정 아이템 획득에 따른 이벤트 실행
     {
         if(_item_event_code > 0)
         {                

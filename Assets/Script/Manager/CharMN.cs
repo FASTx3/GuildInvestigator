@@ -3,12 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using LitJson;
 
 public class CharMN : MonoBehaviour
 {
     void Awake()
     {
         GameData.Instance._char = this;
+    }
+
+    private JsonData _jsonList;
+
+    public IEnumerator SetCharData()
+    {                
+        yield return StartCoroutine(LoadCharData());
+    }
+
+    public IEnumerator LoadCharData()
+	{
+		TextAsset t = (TextAsset)Resources.Load("char", typeof(TextAsset));
+		yield return t;
+		yield return StartCoroutine(SetDataChar(t.text));
+	}
+
+    public IEnumerator SetDataChar(string jsonString)
+	{
+        GameData.Instance._char_data.Clear();
+		_jsonList = JsonMapper.ToObject(jsonString);
+
+        for(var i = 0; i< _jsonList.Count;i++) GameData.Instance._char_data.Add(System.Convert.ToInt32(_jsonList[i]["index"].ToString()), _jsonList[i]["name"].ToString());
+
+        yield return null;  
     }
 
     public List<Sprite> _char_sprite = new List<Sprite>();

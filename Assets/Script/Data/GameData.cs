@@ -111,6 +111,8 @@ public class GameData
 
     public Dictionary<int, List<int>> _mix_item_data = new Dictionary<int, List<int>>();
     public Dictionary<int, string> _announce_data = new Dictionary<int, string>(); 
+    
+    public Dictionary<int, string> _char_data = new Dictionary<int, string>();
 
     public int _data_index;
 

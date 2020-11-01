@@ -55,6 +55,7 @@ public class GM : MonoBehaviour
         yield return StartCoroutine(GameData.Instance._talk.SetEpisodeData());
         yield return StartCoroutine(GameData.Instance._bg.SetMapData());
         yield return StartCoroutine(GameData.Instance._event.SetEventData());
+        yield return StartCoroutine(GameData.Instance._char.SetCharData());
 
         //PlayerPrefs.DeleteAll();
         yield return StartCoroutine(GameData.Instance.LoadData());

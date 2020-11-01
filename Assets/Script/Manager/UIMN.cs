@@ -73,7 +73,7 @@ public class UIMN : MonoBehaviour
             break;
 
             case 3 :
-                GameData.Instance._event.CloseTalk();
+                GameData.Instance._talk.CloseTalk();
             break;
 
             case 4 :
@@ -90,6 +90,10 @@ public class UIMN : MonoBehaviour
 
             case 9 :
                 GameData.Instance._gm._alarm.CloseAlarm();
+            break;
+
+            case 10 :
+                GameData.Instance._talk.CloseTalkMember();
             break;
         }
     }   
