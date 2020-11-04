@@ -199,16 +199,21 @@ public class EventMN : MonoBehaviour
         else return;
 
         _count++;
-        OnEventCompleteCheck();
+
+        _event_show = 0;
+        OnEventCompleteCheck();        
     }
+
+    public int _event_show;
 
     public void OnEventShow()//이벤트 내용
     {
-        _trigger = true;
+        _trigger = true;        
 
         switch(GameData.Instance._episode[_episode][_event_code][_count]._type)
         {
             case 0 : //대화
+                _event_show = 1;
                 GameData.Instance._char.OnChar(GameData.Instance._episode[_episode][_event_code][_count]._source);
                 GameData.Instance._talk.OnTalk(GameData.Instance._episode[_episode][_event_code][_count]);                
             break;
@@ -230,8 +235,11 @@ public class EventMN : MonoBehaviour
             case 4 : //아이템 획득
                 if(GameData.Instance._item._inventory.ContainsKey(GameData.Instance._episode[_episode][_event_code][_count]._source))
                     OnNextEvent();
-                else 
+                else                     
+                {
+                    _event_show = 2;
                     GameData.Instance._item.GetItem(GameData.Instance._episode[_episode][_event_code][_count]._source);
+                }
             break;
 
             case 5 : //효과음                  
@@ -260,8 +268,9 @@ public class EventMN : MonoBehaviour
             break;
 
             case 10 : //튜토리얼 & 안내 메세지
+                _event_show = 3;    
                 GameData.Instance._char.OnCharActive(false);
-                GameData.Instance._gm.OnAlarm(GameData.Instance._announce_data[GameData.Instance._episode[_episode][_event_code][_count]._source]);              
+                OnTutorial(GameData.Instance._episode[_episode][_event_code][_count]._source);                                   
                 //OnNextEvent();
             break;
 
@@ -368,12 +377,41 @@ public class EventMN : MonoBehaviour
     {
         if(_item_event_code > 0)
         {                
+            if(GameData.Instance._talk._talk_trigger) GameData.Instance._talk._talk_trigger = false;
             GameData.Instance._ui.CloseUI_HotKey();
 
             _event_type = 0;
             OnEventStart(_item_event_code);
 
             _item_event_code = 0;
+        }
+    }
+
+    public void OnTutorial(int code)
+    {     
+        GameData.Instance._ui.OpenBottom();
+
+        switch(code)
+        {
+            case 1 :
+                GameData.Instance._gm.OnAlarm(GameData.Instance._announce_data[7]);  
+                GameData.Instance._ui.OnTutorialBtn(0, true);
+            break;
+
+            case 2 :
+                GameData.Instance._gm.OnAlarm(GameData.Instance._announce_data[8]);
+                GameData.Instance._ui.OnTutorialBtn(3, true);
+            break;
+
+            case 3 :
+                GameData.Instance._gm.OnAlarm(GameData.Instance._announce_data[9]);
+                GameData.Instance._ui.OnTutorialBtn(2, true);
+            break;
+
+            case 4 :
+                GameData.Instance._gm.OnAlarm(GameData.Instance._announce_data[10]);
+                GameData.Instance._ui.OnTutorialBtn(1, true);
+            break;
         }
     }
 }

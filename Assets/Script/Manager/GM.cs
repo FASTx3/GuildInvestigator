@@ -67,11 +67,13 @@ public class GM : MonoBehaviour
 
     public void NewGame(int episode)
     {        
+        if(episode == 1) GameData.Instance._ui.OnTutorialSet();
+
         GameData.Instance._bg._map = -1;
         GameData.Instance._event._episode = episode;
         GameData.Instance._event._event_complete.Clear();
         GameData.Instance._item._inventory.Clear();
-
+        
         _new_data = true;
         GameData.Instance._bg._fade.OnFadeIn(OnEpisodeEventData);        
     }

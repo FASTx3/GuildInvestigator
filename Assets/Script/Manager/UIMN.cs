@@ -50,10 +50,17 @@ public class UIMN : MonoBehaviour
     }
 
     public void CloseUI_HotKey()
-    {        
-        if(GameData.Instance._event._event_progress) return;
+    {   
+        if(GameData.Instance._event._event_progress) 
+        {
+            if(GameData.Instance._event._event_show == 1) GameData.Instance._talk._talk.OnTalkDone();
+            else if(GameData.Instance._event._event_show == 2) GameData.Instance._item._announce.OnAnnounceDone();
+            else if(GameData.Instance._event._event_show == 3) GameData.Instance._gm._alarm.CloseAlarm();
+
+            return;
+        }
         if(GameData.Instance._event._search) GameData.Instance._event.CloseSearch();
-        
+
         if(GameData.Instance._item._announce._trigger)
         {
             GameData.Instance._item._announce.OnAnnounceDone();
@@ -96,5 +103,16 @@ public class UIMN : MonoBehaviour
                 GameData.Instance._talk.CloseTalkMember();
             break;
         }
-    }   
+    }  
+
+    public List<Button> _bottom_btn = new List<Button>(); //하단 버튼
+
+    public void OnTutorialSet()
+    {
+        for(var i = 0; i < _bottom_btn.Count; i++) OnTutorialBtn(i, false);
+    }
+    public void OnTutorialBtn(int code, bool show)
+    {
+        _bottom_btn[code].interactable = show;
+    }
 }

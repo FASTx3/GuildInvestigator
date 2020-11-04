@@ -29,6 +29,6 @@ public class Item : MonoBehaviour
 
     public void OnHint()
     {
-        GameData.Instance._gm.OnAlarm(GameData.Instance._item_data[_index]._hint);
+        GameData.Instance._gm.OnAlarm("<정보 획득 힌트>\n\n" + GameData.Instance._item_data[_index]._hint);
     }
 }

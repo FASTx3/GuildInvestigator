@@ -129,6 +129,8 @@ public class TalkMN : MonoBehaviour
         _talk_keyword.Clear();
     }
 
+    public bool _talk_trigger;
+
     public void OpenTalk(int member)
     {
         //대화 대상 닫기
@@ -137,6 +139,8 @@ public class TalkMN : MonoBehaviour
 
         for(var j = 0; j < GameData.Instance._event._talk_event[member].Count; j++) OnTalkKeyword(GameData.Instance._event._talk_event[member][j]); 
         GameData.Instance._ui.OnActiveObject(3, true);
+
+        _talk_trigger = true;
     }
 
     public void CloseTalk()
@@ -144,6 +148,10 @@ public class TalkMN : MonoBehaviour
         GameData.Instance._ui.OnActiveObject(3, false);
         EndTalkKeyword();
 
-        OpenTalkMember();
+        if(_talk_trigger) 
+        {
+            _talk_trigger = false;
+            OpenTalkMember();           
+        }
     }
 }
