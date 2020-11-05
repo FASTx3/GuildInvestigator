@@ -150,7 +150,7 @@ public class EventMN : MonoBehaviour
         }
         else
         {
-            GameData.Instance._bg._bg_now.OnChar(); 
+            //GameData.Instance._bg._bg_now.OnChar(); 
             GameData.Instance._ui.OpenBottom(); 
         }
     }
@@ -161,7 +161,7 @@ public class EventMN : MonoBehaviour
         {
             _count = 0;
 
-            GameData.Instance._bg._bg_now.OnChar();   
+            //GameData.Instance._bg._bg_now.OnChar();   
 
             switch(_event_type)
             {
@@ -276,6 +276,16 @@ public class EventMN : MonoBehaviour
 
             case 11 : //에피소드 종료                 
                 GameData.Instance._gm.OnGameEnd();
+                OnNextEvent();
+            break;
+
+            case 12 : //이동 지역 추가                 
+                GameData.Instance._bg.OnMoveMapAdd(GameData.Instance._episode[_episode][_event_code][_count]._source); 
+                OnNextEvent();
+            break;
+
+            case 13 : //이동 지역 제거                 
+                GameData.Instance._bg.OnMoveMapRemove(GameData.Instance._episode[_episode][_event_code][_count]._source); 
                 OnNextEvent();
             break;
         }

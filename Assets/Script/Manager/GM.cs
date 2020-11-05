@@ -59,6 +59,9 @@ public class GM : MonoBehaviour
 
         //PlayerPrefs.DeleteAll();
         yield return StartCoroutine(GameData.Instance.LoadData());
+
+        GameData.Instance._ui.OnTitleLoadComplete();
+
         yield break;
     }
 
@@ -70,6 +73,7 @@ public class GM : MonoBehaviour
         if(episode == 1) GameData.Instance._ui.OnTutorialSet();
 
         GameData.Instance._bg._map = -1;
+        GameData.Instance._bg._move_map.Clear();
         GameData.Instance._event._episode = episode;
         GameData.Instance._event._event_complete.Clear();
         GameData.Instance._item._inventory.Clear();
@@ -132,6 +136,9 @@ public class GM : MonoBehaviour
             }
         }
 
+        GameData.Instance._playerData[code]._move_map.Clear();
+        for(var key5 = 0; key5 < GameData.Instance._bg._move_map.Count; key5++) GameData.Instance._playerData[code]._move_map.Add(GameData.Instance._bg._move_map[key5]);
+
         GameData.Instance.SaveData();
     }
     
@@ -159,6 +166,10 @@ public class GM : MonoBehaviour
                 GameData.Instance._char._map_member[key4].Add(GameData.Instance._playerData[code]._map_member[key4][i]);
             }
         }
+
+        GameData.Instance._bg._move_map.Clear();
+        for(var key5 = 0; key5 < GameData.Instance._playerData[code]._move_map.Count; key5++) GameData.Instance._bg._move_map.Add(GameData.Instance._playerData[code]._move_map[key5]);
+
 
         if(GameData.Instance._event._episode != GameData.Instance._playerData[code]._episode)
         {

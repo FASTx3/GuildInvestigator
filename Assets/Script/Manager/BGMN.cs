@@ -100,16 +100,31 @@ public class BGMN : MonoBehaviour
     }
 
     public bool _possible_map;
+
+    public List<int> _move_map = new List<int>();
+
     public List<GameObject> _move_btn = new List<GameObject>();
     public List<Text> _move_btn_txt = new List<Text>();
-    public void OnMoveBtnReset()
-    {
-        for(var i = 0; i < _move_btn.Count; i++) _move_btn[i].SetActive(false);
-    }
 
-    public void OnMoveBtnText(int code, string txt)
+    public Dictionary<int, int> _move_code = new Dictionary<int, int>();
+
+    public void OnMoveBtn()
     {
-        _move_btn_txt[code].text = txt;
+        _move_code.Clear();
+        for(var i = 0; i < _move_btn.Count; i++) _move_btn[i].SetActive(false);
+
+        int _btn_index = 0;
+
+        for(var j = 0 ; j < _move_map.Count; j++)
+        {
+            if(_move_map[j] == _map) continue;
+
+            _move_code.Add(_btn_index, _move_map[j]);
+            _move_btn_txt[_btn_index].text = GameData.Instance._map[_move_map[j]];
+            OnMoveBtnActive(_btn_index, true);
+
+            _btn_index++;
+        }
     }
 
     public void OnMoveBtnActive(int code, bool show)
@@ -119,9 +134,12 @@ public class BGMN : MonoBehaviour
 
     public void OpenMap()
     {
-        if(!_possible_map) return;
+        //if(!_possible_map) return;
+        //_bg_now.OnMoveMapCheck();
 
-        _bg_now.OnMoveMapCheck();
+        if(_move_map.Count <= 0) return;     
+
+        OnMoveBtn();   
 
         GameData.Instance._ui.CloseBottom();
         GameData.Instance._ui.OnActiveObject(4, true);
@@ -136,13 +154,23 @@ public class BGMN : MonoBehaviour
     public void OnMoveMap(int code)
     {
         CloseMap();
-        OnChangeMap(false, _bg_now._move[code]);
+        OnChangeMap(false, _move_code[code]);
     }
 
     public void OnSearch(bool active)
     {
-        if(_bg_now._search_obj == null) return;
-        
-        _bg_now._search_obj.SetActive(active);
+        _bg_now.OpenSearch(active);
+    }
+
+    public void OnMoveMapAdd(int code)
+    {
+        if(_move_map.Contains(code)) return;
+        _move_map.Add(code);
+    }
+
+    public void OnMoveMapRemove(int code)
+    {
+        if(!_move_map.Contains(code)) return;
+        _move_map.Remove(code);
     }
 }

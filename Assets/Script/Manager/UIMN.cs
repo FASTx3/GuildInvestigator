@@ -115,4 +115,11 @@ public class UIMN : MonoBehaviour
     {
         _bottom_btn[code].interactable = show;
     }
+
+    public GameObject _title_btn;
+
+    public void OnTitleLoadComplete()
+    {
+        _title_btn.SetActive(true);
+    }
 }

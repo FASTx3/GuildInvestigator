@@ -131,6 +131,8 @@ public class GameData
         public List<int> _my_member = new List<int>();//나와 같이 다니는 멤버
         public Dictionary<int, List<int>> _map_member = new Dictionary<int, List<int>>();//맵에 귀속된 인물
 
+        public List<int> _move_map = new List<int>();//나와 같이 다니는 멤버
+
 
 //---------------------------------------------------
         // 게임 기본 정보에 대한 부분.
