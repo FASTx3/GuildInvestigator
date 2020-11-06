@@ -46,6 +46,8 @@ public class GM : MonoBehaviour
     void Start()
     {
         StartCoroutine(LoadData());
+
+        GameData.Instance._sound.Play_BGMSound(0);
     }
 
     public IEnumerator LoadData()
@@ -106,6 +108,8 @@ public class GM : MonoBehaviour
 
     public void OnGameEnd()
     {
+        if(GameData.Instance._event._event_bgm) GameData.Instance._event._event_bgm = false;
+
         GameData.Instance._ui.OnActiveObject(8, true);
     }
 
@@ -191,6 +195,8 @@ public class GM : MonoBehaviour
 
     public void OnEpisodeEventData()
     {
+        GameData.Instance._sound.Stop_BGMSound();
+
         if(_new_data) GameStart();
         else GameLoadDone();
 

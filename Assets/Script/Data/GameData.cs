@@ -81,7 +81,15 @@ public class GameData
     public EventData _event_data;
     public Dictionary<int, EventData> _eventData = new Dictionary<int, EventData>();
 
-    public List<string> _map = new List<string>();
+    [Serializable]
+    public struct Map
+    {  
+        public int _index; 
+        public string _name; 
+        public int _bgm;         
+    }
+    public Map _map_data;
+    public Dictionary<int, Map> _map = new Dictionary<int, Map>();
 
     [Serializable]
     public struct MapMoveData

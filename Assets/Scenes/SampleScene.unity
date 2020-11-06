@@ -1456,6 +1456,7 @@ MonoBehaviour:
   _event_progress: 0
   _trigger: 0
   _event_show: 0
+  _event_bgm: 0
   _fade:
   - {fileID: 1687482981}
   - {fileID: 1569825482}
@@ -2182,7 +2183,11 @@ MonoBehaviour:
   _playBGM: 1
   _playEFF: 1
   _bgm_sound:
-  - {fileID: 8300000, guid: f59efcffd62cb7543bab3149dfbd2e3f, type: 3}
+  - {fileID: 8300000, guid: 8d6716a12ae72db4b987a344ab86f3ff, type: 3}
+  - {fileID: 8300000, guid: ffa90889891e99c4daca3d566013112f, type: 3}
+  - {fileID: 8300000, guid: 13797dc9e81c0ea4cbd8a66d4fa7829c, type: 3}
+  - {fileID: 8300000, guid: 4db34f71514963741a5a43eadbbcdeb2, type: 3}
+  - {fileID: 8300000, guid: c5310f7ba05ae244c8640e4f2f7b6413, type: 3}
   _eff_sound:
   - {fileID: 8300000, guid: 2d5d4c2551f682d46b20991b28d26492, type: 3}
   _voice_sound: []

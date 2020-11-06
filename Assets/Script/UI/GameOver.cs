@@ -15,6 +15,8 @@ public class GameOver : MonoBehaviour
             _text.DOFade(0,0).SetDelay(2.5f).SetId("end").OnComplete(()=>{
                 gameObject.SetActive(false);
                 GameData.Instance._ui.OnActiveObject(0, true);
+
+                GameData.Instance._sound.Play_BGMSound(0);
             });
         });
     }

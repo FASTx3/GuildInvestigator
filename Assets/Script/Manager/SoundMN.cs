@@ -22,14 +22,24 @@ public class SoundMN : MonoBehaviour
 		SetEffMute();
 	}
 
+	int _bgm_code;
+
     public void Play_BGMSound(int num){
         if(_playBGM)
 		{
 			//if( _bgm_sound[num] != null)
 			if(num < _bgm_sound.Count)
 			{
-				_play_sound[0].clip = _bgm_sound[num];
-				_play_sound[0].Play();
+				if(num < 0)	Stop_BGMSound();
+				else 
+				{
+					if(_bgm_code == num) return;
+
+					_bgm_code = num;
+
+					_play_sound[0].clip = _bgm_sound[num];
+					_play_sound[0].Play();
+				}
 			}
 		}
     }
@@ -41,6 +51,14 @@ public class SoundMN : MonoBehaviour
 			{
 				_play_sound[1].PlayOneShot(_eff_sound[num]);
 			}
+		}
+    }
+
+	public void Stop_BGMSound(){
+        if(_playBGM)
+		{
+			_bgm_code = -1;
+			_play_sound[0].Stop();
 		}
     }
 

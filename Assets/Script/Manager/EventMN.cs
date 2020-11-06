@@ -172,6 +172,7 @@ public class EventMN : MonoBehaviour
                 case 1 : //대화 이벤트
                     GameData.Instance._ui.CloseBottom();
                     GameData.Instance._ui.OnActiveObject(3, true);
+                    GameData.Instance._char.OnCharActive(false);
                 break;
 
                 case 2 : //조사 이벤트
@@ -205,6 +206,7 @@ public class EventMN : MonoBehaviour
     }
 
     public int _event_show;
+    public bool _event_bgm;
 
     public void OnEventShow()//이벤트 내용
     {
@@ -223,7 +225,11 @@ public class EventMN : MonoBehaviour
             break;
 
             case 2 : //배경음 변경
-                GameData.Instance._sound.Play_BGMSound(GameData.Instance._episode[_episode][_event_code][_count]._source);
+                if(GameData.Instance._episode[_episode][_event_code][_count]._source == -1) _event_bgm = false;
+                else _event_bgm = true;
+
+                GameData.Instance._sound.Play_BGMSound(GameData.Instance._episode[_episode][_event_code][_count]._source);                
+                
                 OnNextEvent();
             break;
 

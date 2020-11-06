@@ -1,5 +1,5 @@
-[{"index":0,"name":"마을"},
-{"index":1,"name":"마을 외곽 숲 입구"},
-{"index":2,"name":"마을 외곽 숲"},
-{"index":3,"name":"마을 외곽 숲 깊은 곳"},
-{"index":4,"name":"모험가 길드"}]
+[{"index":0,"name":"마을","bgm":1},
+{"index":1,"name":"마을 외곽 숲 입구","bgm":2},
+{"index":2,"name":"마을 외곽 숲","bgm":2},
+{"index":3,"name":"마을 외곽 숲 깊은 곳","bgm":2},
+{"index":4,"name":"모험가 길드","bgm":3}]

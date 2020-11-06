@@ -33,7 +33,11 @@ public class BGMN : MonoBehaviour
 
         for(var i = 0; i< _jsonList.Count;i++)
         {   
-            GameData.Instance._map.Add(_jsonList[i]["name"].ToString());
+            GameData.Instance._map_data._index = System.Convert.ToInt32(_jsonList[i]["index"].ToString());
+            GameData.Instance._map_data._name = _jsonList[i]["name"].ToString();
+            GameData.Instance._map_data._bgm = System.Convert.ToInt32(_jsonList[i]["bgm"].ToString());
+
+            GameData.Instance._map.Add(GameData.Instance._map_data._index, GameData.Instance._map_data);
         }
 
         yield return null;  
@@ -86,17 +90,25 @@ public class BGMN : MonoBehaviour
         GameData.Instance._ui.CloseBottom();
         
         if(_bg_now != null) Destroy(_bg_now.gameObject);
-
-        if(_map < 0) return;
         
-        _bg_now = Instantiate(_bg[_map], _bg_parent);
+        
+        
 
-        _bg_now.transform.localPosition = Vector3.zero;
-        _bg_now.transform.localScale = Vector3.one;
+        if(_map < 0) 
+        {
+            if(!GameData.Instance._event._event_bgm) GameData.Instance._sound.Stop_BGMSound();
+        }
+        else 
+        {            
+            _bg_now = Instantiate(_bg[_map], _bg_parent);
 
-        _bg_now.OnSet(_map);
+            _bg_now.transform.localPosition = Vector3.zero;
+            _bg_now.transform.localScale = Vector3.one;
 
-        GameData.Instance._sound.Play_BGMSound(_map);
+            _bg_now.OnSet(_map);
+
+            if(!GameData.Instance._event._event_bgm) GameData.Instance._sound.Play_BGMSound(GameData.Instance._map[_map]._bgm);
+        }
     }
 
     public bool _possible_map;
@@ -120,7 +132,7 @@ public class BGMN : MonoBehaviour
             if(_move_map[j] == _map) continue;
 
             _move_code.Add(_btn_index, _move_map[j]);
-            _move_btn_txt[_btn_index].text = GameData.Instance._map[_move_map[j]];
+            _move_btn_txt[_btn_index].text = GameData.Instance._map[_move_map[j]]._name;
             OnMoveBtnActive(_btn_index, true);
 
             _btn_index++;
