@@ -22,7 +22,7 @@ public class SoundMN : MonoBehaviour
 		SetEffMute();
 	}
 
-	int _bgm_code;
+	int _bgm_code = -1;
 
     public void Play_BGMSound(int num){
         if(_playBGM)

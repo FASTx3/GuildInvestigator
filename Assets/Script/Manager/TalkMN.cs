@@ -96,6 +96,8 @@ public class TalkMN : MonoBehaviour
         
         GameData.Instance._ui.CloseBottom();
         GameData.Instance._ui.OnActiveObject(10, true);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
     public void CloseTalkMember()
     {
@@ -103,6 +105,8 @@ public class TalkMN : MonoBehaviour
         GameData.Instance._ui.OnActiveObject(10, false);
 
         EndTalkMember();
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
    
     public Transform _talk_event_parent;
@@ -141,6 +145,8 @@ public class TalkMN : MonoBehaviour
         GameData.Instance._ui.OnActiveObject(3, true);
 
         _talk_trigger = true;
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 
     public void CloseTalk()
@@ -151,7 +157,9 @@ public class TalkMN : MonoBehaviour
         if(_talk_trigger) 
         {
             _talk_trigger = false;
-            OpenTalkMember();           
+            OpenTalkMember();     
+
+            GameData.Instance._sound.Play_EffectSound(1);      
         }
     }
 }

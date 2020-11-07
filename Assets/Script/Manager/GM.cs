@@ -46,8 +46,6 @@ public class GM : MonoBehaviour
     void Start()
     {
         StartCoroutine(LoadData());
-
-        GameData.Instance._sound.Play_BGMSound(0);
     }
 
     public IEnumerator LoadData()
@@ -63,6 +61,7 @@ public class GM : MonoBehaviour
         yield return StartCoroutine(GameData.Instance.LoadData());
 
         GameData.Instance._ui.OnTitleLoadComplete();
+        GameData.Instance._sound.Play_BGMSound(0);
 
         yield break;
     }
@@ -81,7 +80,9 @@ public class GM : MonoBehaviour
         GameData.Instance._item._inventory.Clear();
         
         _new_data = true;
-        GameData.Instance._bg._fade.OnFadeIn(OnEpisodeEventData);        
+        GameData.Instance._bg._fade.OnFadeIn(OnEpisodeEventData);      
+
+        GameData.Instance._sound.Play_EffectSound(1);  
     }
 
     public void GameStart()
@@ -92,18 +93,31 @@ public class GM : MonoBehaviour
     public void OpenSaveDataUI()
     {
         GameData.Instance._ui.OnActiveObject(1, true);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 
     public void OpenLoadDataUI()
     {
         GameData.Instance._ui.OnActiveObject(2, true);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
+
+    public void QuitGame()
+    {
+        GameData.Instance._sound.Play_EffectSound(1);
+
+        Application.Quit();
+    }
+    
 
     public Alarm _alarm;
 
     public void OnAlarm(string text)
     {
         _alarm.OnSet(text);
+        GameData.Instance._sound.Play_EffectSound(4);
     }
 
     public void OnGameEnd()

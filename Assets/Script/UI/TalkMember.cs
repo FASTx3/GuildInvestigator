@@ -19,5 +19,7 @@ public class TalkMember : MonoBehaviour
     public void OnTalk()
     {
         GameData.Instance._talk.OpenTalk(_index);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 }

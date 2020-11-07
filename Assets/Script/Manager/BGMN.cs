@@ -155,12 +155,16 @@ public class BGMN : MonoBehaviour
 
         GameData.Instance._ui.CloseBottom();
         GameData.Instance._ui.OnActiveObject(4, true);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 
     public void CloseMap()
     {
         GameData.Instance._ui.OpenBottom();
         GameData.Instance._ui.OnActiveObject(4, false);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }   
 
     public void OnMoveMap(int code)

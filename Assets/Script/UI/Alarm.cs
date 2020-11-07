@@ -15,6 +15,8 @@ public class Alarm : MonoBehaviour
 
     public void CloseAlarm()
     {                
+        GameData.Instance._sound.Play_EffectSound(1);
+        
         GameData.Instance._ui.OnActiveObject(9, false);
         _text.text= "";
 

@@ -115,6 +115,8 @@ public class ItemMN : MonoBehaviour
         else _inventory[code] = 1;
 
         GameData.Instance._event.OnItemEventCheck(code);
+
+        GameData.Instance._sound.Play_EffectSound(2);
     }
 
 
@@ -135,6 +137,8 @@ public class ItemMN : MonoBehaviour
         else GameData.Instance._ui.OnActiveObject(7, true);
 
         GameData.Instance._ui.OnActiveObject(6, true);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 
     public void CloseItem()//수집한 정보창 닫기
@@ -145,6 +149,8 @@ public class ItemMN : MonoBehaviour
         else GameData.Instance._ui.OnActiveObject(7, false);
 
         for(var i = 1; i < _item_list.Count+1; i++) Destroy(_item_list[i].gameObject);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 
     public void OnItem()
@@ -167,7 +173,9 @@ public class ItemMN : MonoBehaviour
         _mix_window = true;
 
         GameData.Instance._ui.OnActiveObject(7, true);
-        GameData.Instance._ui.OnActiveObject(5, true);        
+        GameData.Instance._ui.OnActiveObject(5, true);    
+
+        GameData.Instance._sound.Play_EffectSound(1);    
     }
 
     public void CloseMix()//정보 조합창 닫기
@@ -179,6 +187,8 @@ public class ItemMN : MonoBehaviour
 
         GameData.Instance._ui.OnActiveObject(5, false);
         GameData.Instance._ui.OnActiveObject(7, false);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 
     public void OnSellectItem(int index)
@@ -196,11 +206,13 @@ public class ItemMN : MonoBehaviour
         if(_mix_slot[0]._index == 0 || _mix_slot[1]._index == 0) //조합할 정보가 없습니다.
         {
             _announce.OnAnnounce(GameData.Instance._announce_data[3]);
+            GameData.Instance._sound.Play_EffectSound(5);
             return;
         }
         if(_mix_slot[0]._index == _mix_slot[1]._index) //같은 정보끼리는 조합 할 수 없습니다.
         {
             _announce.OnAnnounce(GameData.Instance._announce_data[4]);
+            GameData.Instance._sound.Play_EffectSound(5);
             return;
         }
 
@@ -214,7 +226,11 @@ public class ItemMN : MonoBehaviour
 
         if(_mix_complete > 0)
         {
-            if(_inventory.ContainsKey(_mix_complete)) _announce.OnAnnounce(GameData.Instance._announce_data[5]); //이미 획득한 정보입니다.
+            if(_inventory.ContainsKey(_mix_complete))  //이미 획득한 정보입니다.
+            {
+                _announce.OnAnnounce(GameData.Instance._announce_data[5]);
+                GameData.Instance._sound.Play_EffectSound(5);
+            }
             else
             {
                 _mix_slot[0].OnReset();
@@ -223,6 +239,10 @@ public class ItemMN : MonoBehaviour
                 GetItem(_mix_complete);
             }
         }
-        else _announce.OnAnnounce(GameData.Instance._announce_data[6]); //아이템 조합 불가능
+        else //아이템 조합 불가능
+        {
+            _announce.OnAnnounce(GameData.Instance._announce_data[6]);
+            GameData.Instance._sound.Play_EffectSound(5);
+        }
     }
 }

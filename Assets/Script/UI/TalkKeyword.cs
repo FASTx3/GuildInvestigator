@@ -19,5 +19,7 @@ public class TalkKeyword : MonoBehaviour
 
         GameData.Instance._event._event_type = 1;
         GameData.Instance._event.OnEventStart(_event_index);
+
+        GameData.Instance._sound.Play_EffectSound(1);
     }
 }

@@ -84,9 +84,6 @@ public class EventMN : MonoBehaviour
         yield return null;  
     }
 
-    
-
-
     public int _episode;
     public int _event_code;
     public int _count;
@@ -94,6 +91,9 @@ public class EventMN : MonoBehaviour
     public bool _event_progress;
 
     public Dictionary<int, bool> _event_complete = new Dictionary<int, bool>();
+
+    public InvestigateComplete _investigate_complete;
+
 
     public void OnFirstEvent()
     {
@@ -294,6 +294,10 @@ public class EventMN : MonoBehaviour
                 GameData.Instance._bg.OnMoveMapRemove(GameData.Instance._episode[_episode][_event_code][_count]._source); 
                 OnNextEvent();
             break;
+
+            case 14 : //조사 완료
+                _investigate_complete.OnInvestigateComplete();                               
+            break;
         }
     }
 
@@ -395,6 +399,7 @@ public class EventMN : MonoBehaviour
         {                
             if(GameData.Instance._talk._talk_trigger) GameData.Instance._talk._talk_trigger = false;
             GameData.Instance._ui.CloseUI_HotKey();
+            GameData.Instance._sound.Stop_EffectSound();
 
             _event_type = 0;
             OnEventStart(_item_event_code);

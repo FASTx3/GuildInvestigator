@@ -18,6 +18,8 @@ public class BG : MonoBehaviour
 
     public void OpenSearch(bool show)
     {
+        GameData.Instance._sound.Play_EffectSound(1);
+
         if(_search_obj != null) _search_obj.SetActive(show);
     }
 
@@ -31,6 +33,8 @@ public class BG : MonoBehaviour
 
     public void CloseSearch()
     {
+        GameData.Instance._sound.Play_EffectSound(1);
+        
         GameData.Instance._event.CloseSearch();
     }
 }

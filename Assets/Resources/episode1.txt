@@ -83,6 +83,7 @@
 {"chapter":5,"type":0,"source":1,"name":"대니얼","function":"정보는 얼추 수집한 거 같군.","emotion":0},
 {"chapter":5,"type":0,"source":1,"name":"대니얼","function":"이제 지금까지 수집한 정보들을\n종합해서 보상의 지급 여부를 결정해봐.","emotion":0},
 {"chapter":5,"type":10,"source":4,"name":"","function":"(튜토리얼 - 정보 조합)","emotion":0},
+{"chapter":6,"type":14,"source":0,"name":"","function":"(조사 완료)","emotion":0},
 {"chapter":6,"type":2,"source":4,"name":"","function":"(배경음 변경)","emotion":0},
 {"chapter":6,"type":0,"source":0,"name":"로지","function":"현장을 조사한 결과 \n고블린을 토벌했다고 보기 어렵습니다.","emotion":0},
 {"chapter":6,"type":0,"source":0,"name":"로지","function":"그래서 보상을 지급할 수 가 없겠습니다.","emotion":0},
