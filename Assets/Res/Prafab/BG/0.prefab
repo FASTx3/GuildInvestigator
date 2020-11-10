@@ -356,12 +356,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9816519, b: 0.8254717, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 4c0aec66407deb2498bd7f4769577dec, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -386,7 +386,6 @@ MonoBehaviour:
   _index: 0
   _event: 
   _search_obj: {fileID: 6111691005054277856}
-  _auto_event: 0
 --- !u!1 &7365809389994883682
 GameObject:
   m_ObjectHideFlags: 0
