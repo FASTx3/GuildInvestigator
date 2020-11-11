@@ -51,16 +51,18 @@ public class Announce : MonoBehaviour
     }
 
     //아이템 획득 아나운스
-    public void OnAnnounceItem(string txt1, string txt2, string txt3)
+    public void OnAnnounceItem(int code, string txt)
     {
         _announce_type = 1;
 
         _trigger = true;
         _item_trigger = true;
         _announcing = true;        
+
+        _announce_item.sprite = GameData.Instance._item._icon[code-1];
        
-        _announce_txt[0].text = txt1;
-        _announce_txt[1].text = txt2;
+        _announce_txt[0].text = GameData.Instance._item_data[code]._name;
+        _announce_txt[1].text = GameData.Instance._item_data[code]._function;
         _announce_txt[2].text = "";
 
         gameObject.SetActive(true);
@@ -68,7 +70,7 @@ public class Announce : MonoBehaviour
         _announce_pop.DOLocalMoveX(0, 0.25f).SetEase(Ease.Linear).OnComplete(()=>{
             _item_trigger = false;
             _announce.SetActive(true);
-            _announce_txt[2].DOText(txt3, txt3.Length*0.05f).SetEase(Ease.Linear).SetId("announce").OnComplete(()=>{
+            _announce_txt[2].DOText(txt, txt.Length*0.05f).SetEase(Ease.Linear).SetId("announce").OnComplete(()=>{
                 _announcing = false;
             });
         });

@@ -178,6 +178,10 @@ public class EventMN : MonoBehaviour
                 case 2 : //조사 이벤트
                      OnSearch();
                 break;
+
+                case 3 : //게임 타이틀 이동
+                     GameData.Instance._gm.OnGameEnd();
+                break;
             }
 
             if(!_event_complete[_event_code]) _event_complete[_event_code] = true;
@@ -280,8 +284,8 @@ public class EventMN : MonoBehaviour
                 //OnNextEvent();
             break;
 
-            case 11 : //에피소드 종료                 
-                GameData.Instance._gm.OnGameEnd();
+            case 11 : //에피소드 종료       
+                _event_type = 3;                
                 OnNextEvent();
             break;
 

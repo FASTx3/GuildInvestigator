@@ -87,6 +87,7 @@ public class ItemMN : MonoBehaviour
         GameData.Instance._item = this;
     }
 
+    public List<Sprite> _icon = new List<Sprite>();
     public Dictionary<int, int> _inventory = new Dictionary<int, int>();
 
     public Announce _announce;
@@ -109,7 +110,7 @@ public class ItemMN : MonoBehaviour
             break;
         }     
         
-        _announce.OnAnnounceItem(GameData.Instance._item_data[code]._name, GameData.Instance._item_data[code]._function, txt);
+        _announce.OnAnnounceItem(code, txt);
 
         if(!_inventory.ContainsKey(code)) _inventory.Add(code, 1);
         else _inventory[code] = 1;

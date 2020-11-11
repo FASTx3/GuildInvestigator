@@ -25,7 +25,7 @@ public class MixSlot : MonoBehaviour
     {
         _index = code;
         
-        //_icon.sprite = 
+        _icon.sprite =  GameData.Instance._item._icon[code-1];
 
         _text[0].text = GameData.Instance._item_data[code]._name;
         _text[1].text = GameData.Instance._item_data[code]._function;
